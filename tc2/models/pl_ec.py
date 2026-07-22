@@ -8,9 +8,7 @@ class PerceptronLogisticoEC:
         self.w = None
 
     def activation(self, u):
-        denominator = 1.0 + np.exp(-u)
-        denominator[denominator == 0] = 1e-10  # Evitar divisão por zero
-        return 1/denominator
+        return 1.0 / (1.0 + np.exp(-u))
 
     def fit(self, X, d):
         start_time = time.time()
