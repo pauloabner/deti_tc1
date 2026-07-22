@@ -16,3 +16,11 @@ class LinearLeastSquaresClassifier:
 
         elapsed_time = time.time() - start_time
         return elapsed_time
+
+    def predict(self, X):
+        N = X.shape[0]
+        X_bias = np.hstack([np.ones((N, 1)), X])
+        u = X_bias @ self.w
+        y_pred = np.sign(u)
+        y_pred[y_pred == 0] = 1  # Atribuir +1 para valores de u iguais a zero
+        return y_pred

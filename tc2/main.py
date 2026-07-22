@@ -25,4 +25,9 @@ if __name__ == "__main__":
         model = LinearLeastSquaresClassifier()
         train_time = model.fit(X_train_norm, d_train)
 
-        
+        d_pred = model.predict(X_test_norm)
+
+        print(f"Run {r + 1}/{Nr}: Training time: {train_time:.6f} seconds, predicted labels: {d_pred}, true labels: {d_test}")
+
+
+

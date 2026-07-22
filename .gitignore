@@ -50,4 +50,6 @@ dist/
 *.log
 *.sqlite3
 *.db
-*.sqlite
+*.
+
+.env/
