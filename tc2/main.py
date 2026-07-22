@@ -2,8 +2,9 @@ import numpy as np
 from utils.dataset import load_breast_cancer_data
 from utils.preprocessing import zscore_train_test
 from models.lqm import LinearLeastSquaresClassifier
+from utils.metrics import compute_statistics, accuracy_score
 
-if __name__ == "__main__":
+def run_experiment():
     ptrn = 0.8
     Nr = 50
     accuracies = []
@@ -29,9 +30,21 @@ if __name__ == "__main__":
 
         d_pred = model.predict(X_test_norm)
 
-        accuracy = np.mean(d_pred == d_test)
+        accuracy = accuracy_score(d_test, d_pred)
         accuracies.append(accuracy)
 
         execution_times.append(train_time)
+    
+    stats = compute_statistics(accuracies, execution_times)
+    
+    print("\n--- RESULTADOS FINAIS: CLASSIFICADOR LMQ ---")
+    print(f"Média da Acurácia : {stats['media']:.2f}%")
+    print(f"Desvio Padrão     : {stats['desvio_padrao']:.2f}")
+    print(f"Mínimo            : {stats['minimo']:.2f}%")
+    print(f"Máximo            : {stats['maximo']:.2f}%")
+    print(f"Mediana           : {stats['mediana']:.2f}%")
+    print(f"Tempo Total       : {stats['tempo_total']:.4f} segundos")
 
-    print(f"Mean Accuracy: {np.mean(accuracies):.2f}% ± {np.std(accuracies):.2f}%")
+
+if __name__ == "__main__":
+    run_experiment()
