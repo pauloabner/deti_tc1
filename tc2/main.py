@@ -2,6 +2,7 @@ import numpy as np
 from utils.dataset import load_breast_cancer_data
 from utils.preprocessing import zscore_train_test
 from models.lqm import LinearLeastSquaresClassifier
+from models.pl_eq import PerceptronLogisticoEQ
 from utils.metrics import compute_statistics, accuracy_score
 
 def run_experiment():
@@ -25,7 +26,8 @@ def run_experiment():
 
         X_train_norm, X_test_norm = zscore_train_test(X_train, X_test)
 
-        model = LinearLeastSquaresClassifier()
+        # model = LinearLeastSquaresClassifier()
+        model = PerceptronLogisticoEQ(eta=0.1, epochs=150)
         train_time = model.fit(X_train_norm, d_train)
 
         d_pred = model.predict(X_test_norm)
