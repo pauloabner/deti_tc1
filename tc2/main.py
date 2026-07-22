@@ -6,6 +6,8 @@ from models.lqm import LinearLeastSquaresClassifier
 if __name__ == "__main__":
     ptrn = 0.8
     Nr = 50
+    accuracies = []
+    execution_times = []
 
     filepath = "data/wdbc.data"
     X, d = load_breast_cancer_data(filepath)
@@ -27,7 +29,9 @@ if __name__ == "__main__":
 
         d_pred = model.predict(X_test_norm)
 
-        print(f"Run {r + 1}/{Nr}: Training time: {train_time:.6f} seconds, predicted labels: {d_pred}, true labels: {d_test}")
+        accuracy = np.mean(d_pred == d_test)
+        accuracies.append(accuracy)
 
+        execution_times.append(train_time)
 
-
+    print(f"Mean Accuracy: {np.mean(accuracies):.2f}% ± {np.std(accuracies):.2f}%")
