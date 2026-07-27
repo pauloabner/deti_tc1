@@ -4,6 +4,7 @@ from utils.preprocessing import zscore_train_test
 from models.lqm import LinearLeastSquaresClassifier
 from models.pl_eq import PerceptronLogisticoEQ
 from models.pl_ec import PerceptronLogisticoEC
+from models.mlp import PerceptronMultiLayer as MLP
 from utils.metrics import compute_statistics, accuracy_score
 
 def run_experiment():
@@ -29,7 +30,9 @@ def run_experiment():
 
         # model = LinearLeastSquaresClassifier()
         # model = PerceptronLogisticoEQ(eta=0.1, epochs=150)
-        model = PerceptronLogisticoEC(eta=0.1, epochs=150)
+        # model = PerceptronLogisticoEC(eta=0.1, epochs=150)
+        # model = MLP(eta=0.1, epochs=150, hidden_layer_sizes=(10,)) 
+        model = MLP(eta=0.1, epochs=150, hidden_layer_sizes=(10,5)) # Escolha do modelo a ser testado
         train_time = model.fit(X_train_norm, d_train)
 
         d_pred = model.predict(X_test_norm)
@@ -41,7 +44,7 @@ def run_experiment():
     
     stats = compute_statistics(accuracies, execution_times)
     
-    print("\n--- RESULTADOS FINAIS: CLASSIFICADOR LMQ ---")
+    print(f"\n--- RESULTADOS FINAIS: CLASSIFICADOR {type(model).__name__} ---")
     print(f"Média da Acurácia : {stats['media']:.2f}%")
     print(f"Desvio Padrão     : {stats['desvio_padrao']:.2f}")
     print(f"Mínimo            : {stats['minimo']:.2f}%")
