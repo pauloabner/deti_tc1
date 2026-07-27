@@ -9,3 +9,32 @@ def zscore_train_test(X_train, X_test):
     X_test_norm = (X_test - mean) / std
 
     return X_train_norm, X_test_norm
+
+def no_normalization(X_train, X_test):
+    """Retorna os dados originais (Sem Normalização)"""
+    return X_train, X_test
+
+def minmax_01_normalize(X_train, X_test):
+    """Normalização por mudança de escala para o intervalo [0, +1]"""
+    min_val = np.min(X_train, axis=0)
+    max_val = np.max(X_train, axis=0)
+    range_val = max_val - min_val
+    
+    # Evita divisão por zero
+    range_val[range_val == 0.0] = 1.0
+    
+    X_train_norm = (X_train - min_val) / range_val
+    X_test_norm = (X_test - min_val) / range_val
+    
+    return X_train_norm, X_test_norm
+
+def minmax_bipolar_normalize(X_train, X_test):
+    """Normalização por mudança de escala para o intervalo [-1, +1]"""
+    # Primeiro escala para [0, 1]
+    X_train_01, X_test_01 = minmax_01_normalize(X_train, X_test)
+    
+    # Depois converte de [0, 1] para [-1, +1] usando: Y = X * 2 - 1
+    X_train_norm = X_train_01 * 2.0 - 1.0
+    X_test_norm = X_test_01 * 2.0 - 1.0
+    
+    return X_train_norm, X_test_norm
