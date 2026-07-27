@@ -38,3 +38,22 @@ def minmax_bipolar_normalize(X_train, X_test):
     X_test_norm = X_test_01 * 2.0 - 1.0
     
     return X_train_norm, X_test_norm
+
+def apply_pca(X_train, X_test, num_componente):
+    cov_matrix = np.cov(X_train, rowvar=False)
+    eigenvalues, eigenvectors = np.linalg.eigh(cov_matrix)
+
+    sorted_indices = np.argsort(eigenvalues)[::-1]
+    eigenvalues = eigenvalues[sorted_indices]
+    eigenvectors = eigenvectors[:, sorted_indices]
+
+    total_variance = np.sum(eigenvalues)
+    explained_variance_ratio = eigenvalues / total_variance
+
+    projection_matrix = eigenvectors[:, :num_componente]
+    X_train_pca = np.dot(X_train, projection_matrix)
+    X_test_pca = np.dot(X_test, projection_matrix)
+
+    variance_retained = np.sum(explained_variance_ratio[:num_componente]) *100
+
+    return X_train_pca, X_test_pca, variance_retained

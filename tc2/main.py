@@ -52,7 +52,7 @@ def run_experiment():
                 X_train, X_test = X[train_idx], X[test_idx]
                 d_train, d_test = d[train_idx], d[test_idx]
 
-                X_train_norm, X_test_norm = zscore_train_test(X_train, X_test)
+                X_train_norm, X_test_norm = norm_function(X_train, X_test)
   
                 model = model_constructor()       
                 train_time = model.fit(X_train_norm, d_train)
@@ -82,7 +82,7 @@ def run_experiment():
             print(f"  Tempo Total       : {stats['tempo_total']:.4f} segundos")
             print(f" -> Normalização: {norm_name:<20} | Acurácia Média: {stats['media']:.2f}% (±{stats['desvio_padrao']:.2f})")
     
-    print(f"🌟 MELHOR CONFIGURAÇÃO PARA {model_name}: {best_norm}")
+    print(f" MELHOR CONFIGURAÇÃO PARA {model_name}: {best_norm}")
     print(f"Valores para a Tabela 1:")
     print(f"Média  : {best_stats['media']:.2f}%")
     print(f"Desvio : {best_stats['desvio_padrao']:.2f}")
