@@ -83,3 +83,32 @@ def apply_pca_full(X, num_components):
     X_pca = np.dot(X, projection_matrix)
     
     return X_pca, variance_retained
+
+def apply_pca_train_test(X_train, X_test, num_components):
+    """
+    Aplica o PCA extraindo a matriz de transformação APENAS dos dados de treino.
+    """
+    # Centralizar os dados com base APENAS no treino
+    mean_train = np.mean(X_train, axis=0)
+    X_train_cent = X_train - mean_train
+    X_test_cent = X_test - mean_train
+    
+    cov_matrix = np.cov(X_train_cent, rowvar=False)
+    
+    eigenvalues, eigenvectors = np.linalg.eigh(cov_matrix)
+    
+    sorted_indices = np.argsort(eigenvalues)[::-1]
+    eigenvalues = eigenvalues[sorted_indices]
+    eigenvectors = eigenvectors[:, sorted_indices]
+    
+    # Selecionar a Matriz Q (autovetores principais)
+    Q_matrix = eigenvectors[:, :num_components]
+    
+    total_variance = np.sum(eigenvalues)
+    explained_variance_ratio = eigenvalues / total_variance
+    variance_retained = np.sum(explained_variance_ratio[:num_components]) * 100
+    
+    X_train_pca = np.dot(X_train_cent, Q_matrix)
+    X_test_pca = np.dot(X_test_cent, Q_matrix)
+    
+    return X_train_pca, X_test_pca, variance_retained
