@@ -57,3 +57,29 @@ def apply_pca(X_train, X_test, num_components):
     variance_retained = np.sum(explained_variance_ratio[:num_components]) *100
 
     return X_train_pca, X_test_pca, variance_retained
+
+def zscore_full(X):
+    """Aplica Z-score em toda a matriz de dados de uma só vez."""
+    mean = np.mean(X, axis=0)
+    std = np.std(X, axis=0)
+    std[std == 0.0] = 1.0
+    return (X - mean) / std
+
+def apply_pca_full(X, num_components):
+    """Aplica o PCA em toda a matriz de dados."""
+    cov_matrix = np.cov(X, rowvar=False)
+    
+    eigenvalues, eigenvectors = np.linalg.eigh(cov_matrix)
+    
+    sorted_indices = np.argsort(eigenvalues)[::-1]
+    eigenvalues = eigenvalues[sorted_indices]
+    eigenvectors = eigenvectors[:, sorted_indices]
+    
+    total_variance = np.sum(eigenvalues)
+    explained_variance_ratio = eigenvalues / total_variance
+    variance_retained = np.sum(explained_variance_ratio[:num_components]) * 100
+    
+    projection_matrix = eigenvectors[:, :num_components]
+    X_pca = np.dot(X, projection_matrix)
+    
+    return X_pca, variance_retained
