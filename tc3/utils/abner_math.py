@@ -78,6 +78,10 @@ def calculate_r2(y_true, y_pred):
     ss_tot = np.sum((y_true - np.mean(y_true))**2)
     return 1 - (ss_res / ss_tot)
 
+def calculate_sae(y_true, y_pred):
+    """Calcula a Soma dos Erros Absolutos (SEA - Questão 3)."""
+    return np.sum(np.abs(y_true - y_pred))
+
 class Gauss:
     def __init__(self, y, x, dim):
         self.beta = None

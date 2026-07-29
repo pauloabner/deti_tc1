@@ -1,7 +1,7 @@
 import numpy as np
-from utils.abner_math import predict_polynomial, calculate_sse
+from utils.abner_math import predict_polynomial, calculate_sse, calculate_sae
 
-def particle_swarm_optimization(x_data, y_data, num_particles, dimensions, bounds, max_iterations, c1=2.0, c2=2.0, w=0.7):
+def particle_swarm_optimization(x_data, y_data, num_particles, dimensions, bounds, max_iterations, c1=2.0, c2=2.0, w=0.7, error_metric=calculate_sse):
     """
     Implementação do algoritmo PSO (Particle Swarm Optimization) padrão para minimização de erro.
     
@@ -31,7 +31,7 @@ def particle_swarm_optimization(x_data, y_data, num_particles, dimensions, bound
     
     for i in range(num_particles):
         y_pred = predict_polynomial(x_data, particles_position[i])
-        pbest_error[i] = calculate_sse(y_data, y_pred)
+        pbest_error[i] = error_metric(y_data, y_pred)
         
     # gbest (global best): Melhor posição encontrada por QUALQUER partícula do enxame
     gbest_index = np.argmin(pbest_error)
@@ -63,7 +63,7 @@ def particle_swarm_optimization(x_data, y_data, num_particles, dimensions, bound
             
             # Avaliação da nova posição
             y_pred_cand = predict_polynomial(x_data, particles_position[i])
-            current_error = calculate_sse(y_data, y_pred_cand)
+            current_error = error_metric(y_data, y_pred_cand)
             
             # Atualização do pbest (Melhor Individual)
             if current_error < pbest_error[i]:
